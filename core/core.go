@@ -3,26 +3,33 @@ package core
 import (
 	"strings"
 	"github.com/Kpovoc/JBot-Go/plugin"
+	"github.com/Kpovoc/JBot-Go/core/message"
 )
 
-func GenerateResponse(m *Message) string {
+func GenerateResponse(m *message.Message) string {
 	content := m.Content
 	if content[0] != '!' {
 		return ""
 	}
 
-	pluginName, args := parseContent(content)
+	pluginName, msgContent := parseContent(content)
 	if pluginName == "" {
 		return ""
 	}
 
-	return plugin.GetPluginResponse(pluginName, args)
+	return plugin.GetPluginResponse(pluginName, msgContent, m)
 }
 
-func parseContent(content string) (string, []string) {
+func parseContent(content string) (string, string) {
 	content = strings.TrimSpace(content)
-	args := strings.Split(content[1:], " ")
+	args := strings.SplitN(content[1:], " ", 2)
 	pluginName := args[0]
-	return pluginName, args[1:]
+	msgContent := ""
+
+	if len(args) > 1 {
+		msgContent = args[1]
+	}
+
+	return pluginName, msgContent
 }
 

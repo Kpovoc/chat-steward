@@ -1,9 +1,11 @@
 package plugin
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
-func EightBall(args []string) string {
-	if len(args) <= 0 {
+func EightBall(msgContent string) string {
+	if len(msgContent) <= 0 {
 		return "You must first ask a question, before you can receive the answer."
 	}
 
@@ -29,5 +31,7 @@ func EightBall(args []string) string {
 		"Very doubtful",
 	}
 
-	return answers[rand.Intn(len(answers))]
+	selectedIndex := rand.Intn(len(answers))
+
+	return answers[selectedIndex]
 }
