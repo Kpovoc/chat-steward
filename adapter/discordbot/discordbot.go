@@ -6,16 +6,33 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/bwmarrin/discordgo"
 	"github.com/Kpovoc/JBot-Go/core"
-	"github.com/Kpovoc/JBot-Go/core/user"
 	"github.com/Kpovoc/JBot-Go/core/message"
+	"github.com/Kpovoc/JBot-Go/core/user"
+	"github.com/bwmarrin/discordgo"
 	"github.com/satori/go.uuid"
 )
+
+type DiscordConf struct {
+	BotToken string
+}
 
 type DiscordBot struct {
 	Token string
 	Session *discordgo.Session
+}
+
+func CreateAndStartSession(conf DiscordConf)  (string, error) {
+	discordBot, err := New(conf.BotToken)
+	if err != nil {
+		return "Could not create Discord session", err
+	}
+
+	err = discordBot.Run()
+	if err != nil {
+		return "Something went wrong during Discord run", err
+	}
+	return "", nil
 }
 
 func New(t string) (*DiscordBot, error) {

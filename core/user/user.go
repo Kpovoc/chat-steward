@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/satori/go.uuid"
 	"github.com/bwmarrin/discordgo"
+	"github.com/satori/go.uuid"
 )
 
 type User struct{

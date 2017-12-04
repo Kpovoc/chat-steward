@@ -4,22 +4,20 @@ import (
 	//"log"
 	// "./IrcBot"
 
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"math/rand"
+	"time"
+
 	//"os"
 	//"os/signal"
 	//"syscall"
 	"github.com/Kpovoc/JBot-Go/adapter/discordbot"
-	"math/rand"
-	"time"
-	"encoding/json"
-	"io/ioutil"
 )
-type MainConf struct {
-	Discord DiscordConf
-}
 
-type DiscordConf struct {
-	BotToken string
+type MainConf struct {
+	Discord discordbot.DiscordConf
 }
 
 func main() {
@@ -34,18 +32,9 @@ func main() {
 		panic(err)
 	}
 
-	discordObj := conf.Discord
-	token := discordObj.BotToken
-
-	discordBot, err := discordbot.New(token)
-	if err != nil {
-		fmt.Println("error creating Discord session,", err)
-		return
-	}
-
-	err = discordBot.Run()
-	if err != nil {
-		fmt.Println("Error occured during Run: ", err)
+	errMsg, err := discordbot.CreateAndStartSession(conf.Discord)
+	if errMsg != "" || err != nil {
+		fmt.Printf("An Error has occured:\nMsg: %s\nErr: %s\n", errMsg, err)
 		return
 	}
 
