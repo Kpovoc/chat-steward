@@ -2,7 +2,8 @@ package plugin
 
 import (
 	"github.com/Kpovoc/JBot-Go/core/message"
-	"github.com/Kpovoc/JBot-Go/plugin/suggesttitle"
+	"github.com/Kpovoc/JBot-Go/plugin/titles"
+	"github.com/Kpovoc/JBot-Go/plugin/show"
 )
 
 func GetPluginResponse(pluginName string, msgContent string, m *message.Message) string {
@@ -14,8 +15,14 @@ func GetPluginResponse(pluginName string, msgContent string, m *message.Message)
 	case "eightball":
 		response = EightBall(msgContent)
 	case "suggest":
-		response = suggesttitle.Plugin(m, msgContent)
+		response = titles.Plugin(m, msgContent)
+	case "start_show":
+		response = show.StartShow(m, msgContent)
 	}
 
 	return response
+}
+
+func InitPlugins() {
+	titles.WebInit()
 }

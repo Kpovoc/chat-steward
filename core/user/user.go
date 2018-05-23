@@ -20,7 +20,7 @@ type User struct{
 
 func New(jbID string, discordID string, discordUserName string, ircID string,
 		 twitchID string, telegramID string) *User {
-		 	id := uuid.NewV4()
+		 	id, _ := uuid.NewV4()
 		 	return &User{
 		 		ID: id,
 		 		JBID: jbID,

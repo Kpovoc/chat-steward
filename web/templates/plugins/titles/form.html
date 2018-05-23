@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JBot | Home</title>
+  <link rel="stylesheet" href="/css/w3.css">
+  <link rel="stylesheet" href="/css/w3-riverside.css">
+</head>
+<body>
+  <div class="w3-container w3-theme-light">
+    <h2 class="w3-center">{{.Title}}</h2>
+    <div class="w3-responsive w3-card-4">
+      <table class="w3-table-all w3-hoverable">
+        <thead>
+          <tr class="w3-border-theme w3-theme-d1">
+            <th> </th>
+            <th>Votes</th>
+            <th>Title</th>
+            <th>User</th>
+            <th>When</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Suggestions}}
+            {{if .IsRowLight}}
+              <tr class="w3-theme-l4">
+                <td style="width:50px">
+                  <a class="w3-btn w3-circle w3-theme-l5 w3-ripple"
+                     href="/titles/vote/{{.ID}}">^</a>
+                </td>
+                <td style="width:65px">{{.TotalVotes}}</td>
+                <td>{{.Title}}</td>
+                <td>{{.Author}}</td>
+                <td>{{.TimeAgo}}</td>
+              </tr>
+            {{else}}
+              <tr class="w3-theme-l3">
+                <td style="width:50px">
+                  <a class="w3-btn w3-circle w3-theme-l5 w3-ripple"
+                     href="/titles/vote/{{.ID}}">^</a>
+                </td>
+                <td style="width:65px">{{.TotalVotes}}</td>
+                <td>{{.Title}}</td>
+                <td>{{.Author}}</td>
+                <td>{{.TimeAgo}}</td>
+              </tr>
+            {{end}}
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
