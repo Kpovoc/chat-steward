@@ -82,9 +82,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	message := convertToCoreMessage(s, m)
+	coreMsg := convertToCoreMessage(s, m)
 
-	response := core.GenerateResponse(message)
+	response := core.GenerateResponse(coreMsg)
 
 	if response != "" {
 		s.ChannelMessageSend(m.ChannelID, response)
@@ -92,8 +92,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func convertToCoreMessage(s *discordgo.Session, dMsg *discordgo.MessageCreate) *message.Message{
+	id,_ := uuid.NewV4()
 	sender := &user.User{ // Call Read Function later
-		ID: uuid.NewV4(),
+		ID: id,
 		JBID: "",
 		DiscordID: dMsg.Author.ID,
 		DiscordUserName: dMsg.Author.Username,
