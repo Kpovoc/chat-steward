@@ -1,0 +1,24 @@
+name: jbotgo
+version: git
+summary: Chatbot written in Go for Jupiter Broadcasting
+description: |
+  https://gitlab.com/Kpovoc/JBot-Go
+
+grade: devel
+confinement: strict
+
+apps:
+  jbotgo:
+    command: bin/JBot-Go --userdata "$SNAP_USER_COMMON" --resources "$SNAP/resources"
+    plugs: [network]
+
+parts:
+  go:
+    source-tag: go1.10.2
+  jbotgo:
+    after: [go]
+    source: .
+    plugin: go
+    go-importpath: gitlab.com/Kpovoc/JBot-Go
+    install: |
+      cp -a resources $SNAPCRAFT_PART_INSTALL/resources

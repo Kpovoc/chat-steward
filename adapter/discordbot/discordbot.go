@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Kpovoc/JBot-Go/core"
-	"github.com/Kpovoc/JBot-Go/core/message"
-	"github.com/Kpovoc/JBot-Go/core/user"
+	"gitlab.com/Kpovoc/JBot-Go/core"
+	"gitlab.com/Kpovoc/JBot-Go/core/message"
+	"gitlab.com/Kpovoc/JBot-Go/core/user"
 	"github.com/bwmarrin/discordgo"
 	"github.com/satori/go.uuid"
 )
