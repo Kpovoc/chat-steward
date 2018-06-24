@@ -17,4 +17,12 @@
 .idea/
 
 # Config file containing sensitive info
-resources/configs/main-conf.json
+data/main-conf.json
+
+# Snap Files
+parts/
+prime/
+snap/
+stage/
+jbotgo_*.snap
+

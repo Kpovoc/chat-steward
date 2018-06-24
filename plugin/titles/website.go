@@ -2,12 +2,12 @@ package titles
 
 import (
 	"net/http"
-	"html/template"
 	"time"
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
+	"html/template"
 )
 
 type Page struct {
@@ -25,15 +25,17 @@ type TitleSuggestionDisplay struct{
 	IsRowLight bool
 }
 
-const tmplRoot = "web/templates/plugins/titles/"
-var templates = template.Must(
-	template.ParseFiles(
-		tmplRoot + "form.html", tmplRoot + "results.html"))
+var templates *template.Template
 
 var voteValidPath = regexp.MustCompile("^/(titles)/(vote)/([0-9]+)")
 var ipsThatVoted = make(map[string]bool)
 
-func WebInit() {
+func WebInit(webDir string) {
+	titlesTemplateRoot := webDir + "/templates/plugins/titles/"
+	templates = template.Must(
+		template.ParseFiles(
+			titlesTemplateRoot + "form.html",
+			titlesTemplateRoot + "results.html"))
 	http.HandleFunc("/titles", mainHandler)
 	http.HandleFunc("/titles/vote/", voteHandler)
 }

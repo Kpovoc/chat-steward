@@ -1,9 +1,9 @@
 package plugin
 
 import (
-	"github.com/Kpovoc/JBot-Go/core/message"
-	"github.com/Kpovoc/JBot-Go/plugin/titles"
-	"github.com/Kpovoc/JBot-Go/plugin/show"
+	"gitlab.com/Kpovoc/JBot-Go/core/message"
+	"gitlab.com/Kpovoc/JBot-Go/plugin/titles"
+	"gitlab.com/Kpovoc/JBot-Go/plugin/show"
 )
 
 func GetPluginResponse(pluginName string, msgContent string, m *message.Message) string {
@@ -23,6 +23,6 @@ func GetPluginResponse(pluginName string, msgContent string, m *message.Message)
 	return response
 }
 
-func InitPlugins() {
-	titles.WebInit()
+func InitPlugins(resourceDir string) {
+	titles.WebInit(resourceDir + "/web")
 }
