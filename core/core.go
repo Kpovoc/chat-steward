@@ -2,8 +2,8 @@ package core
 
 import (
 	"strings"
-	"gitlab.com/Kpovoc/JBot-Go/plugin"
-	"gitlab.com/Kpovoc/JBot-Go/core/message"
+	"gitlab.com/Kpovoc/chat-steward/plugin"
+	"gitlab.com/Kpovoc/chat-steward/core/message"
 )
 
 func GenerateResponse(m *message.Message) string {

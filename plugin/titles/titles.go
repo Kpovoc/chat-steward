@@ -1,7 +1,7 @@
 package titles
 
 import (
-	"gitlab.com/Kpovoc/JBot-Go/core/message"
+	"gitlab.com/Kpovoc/chat-steward/core/message"
 	"time"
 	"fmt"
 )

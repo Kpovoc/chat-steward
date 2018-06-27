@@ -1,8 +1,8 @@
 package show
 
 import (
-	"gitlab.com/Kpovoc/JBot-Go/core/message"
-	"gitlab.com/Kpovoc/JBot-Go/plugin/titles"
+	"gitlab.com/Kpovoc/chat-steward/core/message"
+	"gitlab.com/Kpovoc/chat-steward/plugin/titles"
 )
 
 func StartShow(m *message.Message, msgContent string) string {

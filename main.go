@@ -1,16 +1,16 @@
 package main
 
 import (
-	"gitlab.com/Kpovoc/JBot-Go/adapter/discordbot"
-	"gitlab.com/Kpovoc/JBot-Go/adapter/ircbot"
+	"gitlab.com/Kpovoc/chat-steward/adapter/discordbot"
+	"gitlab.com/Kpovoc/chat-steward/adapter/ircbot"
 	"flag"
 	"time"
 	"math/rand"
 	"io/ioutil"
 	"encoding/json"
-	"gitlab.com/Kpovoc/JBot-Go/plugin"
+	"gitlab.com/Kpovoc/chat-steward/plugin"
 	"log"
-	"gitlab.com/Kpovoc/JBot-Go/web"
+	"gitlab.com/Kpovoc/chat-steward/web"
 	"fmt"
 )
 
