@@ -1,7 +1,7 @@
 package message
 
 import (
-	"gitlab.com/Kpovoc/JBot-Go/core/user"
+	"gitlab.com/Kpovoc/chat-steward/core/user"
 	"time"
 )
 
