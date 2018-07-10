@@ -1,10 +1,10 @@
-package plugin
+package eightball
 
 import (
 	"math/rand"
 )
 
-func EightBall(msgContent string) string {
+func Plugin(msgContent string) string {
 	if len(msgContent) <= 0 {
 		return "You must first ask a question, before you can receive the answer."
 	}

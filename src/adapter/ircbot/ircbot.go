@@ -6,11 +6,11 @@ import (
 	"net/textproto"
 	"log"
 	"fmt"
-	"gitlab.com/Kpovoc/chat-steward/core"
-	"gitlab.com/Kpovoc/chat-steward/core/message"
+	"gitlab.com/Kpovoc/chat-steward/src/core"
+	"gitlab.com/Kpovoc/chat-steward/src/core/message"
 	"github.com/satori/go.uuid"
 	"time"
-	"gitlab.com/Kpovoc/chat-steward/core/user"
+	"gitlab.com/Kpovoc/chat-steward/src/core/user"
 )
 
 type IrcConf struct {

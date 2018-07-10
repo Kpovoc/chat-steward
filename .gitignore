@@ -19,6 +19,9 @@
 # Config file containing sensitive info
 data/main-conf.json
 
+# Test Database
+data/main.db
+
 # Snap Files
 parts/
 prime/
