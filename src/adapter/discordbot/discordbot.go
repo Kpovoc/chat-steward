@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"gitlab.com/Kpovoc/chat-steward/core"
-	"gitlab.com/Kpovoc/chat-steward/core/message"
-	"gitlab.com/Kpovoc/chat-steward/core/user"
+	"gitlab.com/Kpovoc/chat-steward/src/core"
+	"gitlab.com/Kpovoc/chat-steward/src/core/message"
+	"gitlab.com/Kpovoc/chat-steward/src/core/user"
 	"github.com/bwmarrin/discordgo"
 	"github.com/satori/go.uuid"
 )

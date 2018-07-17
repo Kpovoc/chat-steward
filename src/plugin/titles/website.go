@@ -44,8 +44,8 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	var tmpl string
 	ip := getIpAddr(r)
 	p := &Page{
-		Title: showTitle,
-		IsRowLight: false,
+		Title:       getShowName(),
+		IsRowLight:  false,
 		Suggestions: getDisplayTitles(),
 	}
 
@@ -67,7 +67,7 @@ func voteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m := voteValidPath.FindStringSubmatch(r.URL.Path)
-	id, _ := strconv.Atoi(m[2]);
+	id, _ := strconv.Atoi(m[3]);
 	addVoteToTitle(id);
 	ipsThatVoted[ip] = true
 	http.Redirect(w, r, "/titles", http.StatusFound)
@@ -123,11 +123,11 @@ func calcTimeAgo(now time.Time, past time.Time) (string) {
 
 	hoursAgo := minutesAgo / 60
 	if (24 > hoursAgo) {
-		return fmt.Sprint("%d hour(s) ago.", hoursAgo)
+		return fmt.Sprintf("%d hour(s) ago.", hoursAgo)
 	}
 
 	daysAgo := hoursAgo / 24
-	return fmt.Sprint("%d day(s) ago.", daysAgo)
+	return fmt.Sprintf("%d day(s) ago.", daysAgo)
 }
 
 var rowLight = false

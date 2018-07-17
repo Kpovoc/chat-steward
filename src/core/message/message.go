@@ -1,7 +1,7 @@
 package message
 
 import (
-	"gitlab.com/Kpovoc/chat-steward/core/user"
+	"gitlab.com/Kpovoc/chat-steward/src/core/user"
 	"time"
 )
 

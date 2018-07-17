@@ -2,8 +2,8 @@ package core
 
 import (
 	"strings"
-	"gitlab.com/Kpovoc/chat-steward/plugin"
-	"gitlab.com/Kpovoc/chat-steward/core/message"
+	"gitlab.com/Kpovoc/chat-steward/src/plugin"
+	"gitlab.com/Kpovoc/chat-steward/src/core/message"
 )
 
 func GenerateResponse(m *message.Message) string {
