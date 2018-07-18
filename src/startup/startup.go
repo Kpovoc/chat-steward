@@ -13,6 +13,7 @@ import (
 type mainConf struct {
 	Discord discordbot.DiscordConf
 	IRC ircbot.IrcConf
+	WebSitePort string
 }
 
 var conf mainConf
@@ -85,7 +86,10 @@ func createConfig(userDataDir string) {
 		"      }\n"
 	ircConfEnd :=
 		"    ]\n" +
-			"  }\n"
+		"  },\n"
+	websitePortConfStart :=
+		"  \"WebSitePort\": \""
+	websitePortConfEnd :=   "\"\n"
 	mainConfEnd :=
 		"}"
 
@@ -208,9 +212,21 @@ func createConfig(userDataDir string) {
 		out = out + "\n" +
 			ircServerConfChannelsEnd
 	}
+
+	sitePort := "8080"
+	fmt.Printf("Select a port number for the website [%s]: ", sitePort)
+	fmt.Scanf("%s", &sitePort)
+
+	if sitePort == "" || len(sitePort) > 5 {
+		fmt.Printf("\"%s\" is an incorrect port. Defaulting to \"8080\"\n", sitePort)
+		sitePort = "8080"
+	}
+
+
 	out = out +
 		ircServerConfEnd +
 		ircConfEnd +
+		websitePortConfStart + sitePort + websitePortConfEnd +
 		mainConfEnd
 
 	_ = ioutil.WriteFile(userDataDir + "/main-conf.json", []byte(out), 0644)
