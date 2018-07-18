@@ -11,7 +11,7 @@ func LaunchBots(resourceDir string) {
 	fatalChan := make(chan error)
 
 	go ircbot.Start(conf.IRC, fatalChan)
-	go web.Start(resourceDir + "/web")
+	go web.Start(resourceDir + "/web", conf.WebSitePort)
 
 	err := <- fatalChan
 	if nil != err {
