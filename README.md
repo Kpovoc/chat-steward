@@ -8,4 +8,4 @@
 # Stuart the Chat Steward
 Chatbot written in Go for Jupiter Broadcasting
 
-Plan to include discord.
+Checkout our [Roadmap to 1.0](https://gitlab.com/Kpovoc/chat-steward/wikis/Roadmap)
