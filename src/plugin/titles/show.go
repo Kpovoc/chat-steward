@@ -14,6 +14,10 @@ func StartShow(m *message.Message, msgContent string) string {
 		author = m.Sender.IrcID
 	}
 
+	if !m.Sender.IsBotAdmin {
+		return author + " is not a registered Bot Admin. Could not comply with request."
+	}
+
 	updateShowName(msgContent)
 	resetTitles()
 	return "Started \"" + msgContent + "\""

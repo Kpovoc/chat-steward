@@ -10,8 +10,7 @@ import (
 	"gitlab.com/Kpovoc/chat-steward/src/core/message"
 	"gitlab.com/Kpovoc/chat-steward/src/core/user"
 	"github.com/bwmarrin/discordgo"
-	"github.com/satori/go.uuid"
-)
+	)
 
 type DiscordConf struct {
 	BotToken string
@@ -22,17 +21,24 @@ type DiscordBot struct {
 	Session *discordgo.Session
 }
 
-func CreateAndStartSession(conf DiscordConf)  (string, error) {
+func CreateAndStartSession(conf DiscordConf) {
 	discordBot, err := New(conf.BotToken)
 	if err != nil {
-		return "Could not create Discord session", err
+		fmt.Printf(
+			"An Error has occured:\nMsg: %s\nErr: %s\n",
+			"Could not create Discord session",
+			err)
+		return
 	}
 
 	err = discordBot.Run()
 	if err != nil {
-		return "Something went wrong during Discord run", err
+		fmt.Printf(
+			"An Error has occured:\nMsg: %s\nErr: %s\n",
+			"Something went wrong during Discord run",
+			err)
+		return
 	}
-	return "", nil
 }
 
 func New(t string) (*DiscordBot, error) {
@@ -91,18 +97,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func convertToCoreMessage(s *discordgo.Session, dMsg *discordgo.MessageCreate) *message.Message{
-	id,_ := uuid.NewV4()
-	sender := &user.User{ // Call Read Function later
-		ID: id,
-		JBID: "",
-		DiscordID: dMsg.Author.ID,
-		DiscordUserName: dMsg.Author.Username,
-		IrcID: "",
-		TwitchID: "",
-		TelegramID: "",
-		DiscordUser: dMsg.Author,
-	}
+func convertToCoreMessage(s *discordgo.Session, dMsg *discordgo.MessageCreate) *message.Message {
+	sender := user.New( // Call Read Function later
+		"",
+		dMsg.Author.ID,
+		dMsg.Author.Username,
+		"",
+		"",
+		"",
+		false)
 
 	// testPrintDGOMessage(s, dMsg)
 

@@ -1,17 +1,18 @@
 package ircbot
 
 import (
-	"net"
 	"bufio"
-	"net/textproto"
-	"log"
 	"fmt"
+	"log"
+	"net"
+	"net/textproto"
+	"time"
+
 	"gitlab.com/Kpovoc/chat-steward/src/core"
 	"gitlab.com/Kpovoc/chat-steward/src/core/message"
-	"github.com/satori/go.uuid"
-	"time"
 	"gitlab.com/Kpovoc/chat-steward/src/core/user"
-)
+
+	)
 
 type IrcConf struct {
 	Servers []IrcServerConf
@@ -22,7 +23,9 @@ type IrcServerConf struct {
 	Port string
 	Nick string
 	User string
+	Password string
 	Channels []string
+	AdminNicks []string
 }
 
 type Bot struct{
@@ -32,13 +35,11 @@ type Bot struct{
 	username string
 	password string
 	ircChannels []string
+	adminNicks []string
 	connection net.Conn
 	ioReader *bufio.Reader
 	tpReader *textproto.Reader
 	errChan chan error
-	// TODO: Don't think we'll need these. If not, remove them.
-	//pread, pwrite chan string
-	//readNick, readText chan []byte
 }
 
 func Start(conf IrcConf, fatalErr chan error) {
@@ -54,8 +55,9 @@ func launchBotForServer(conf IrcServerConf, fatalErr chan error) {
 		port: conf.Port,
 		nickname: conf.Nick,
 		username: conf.User,
-		password: "",
+		password: conf.Password,
 		ircChannels: conf.Channels,
+		adminNicks: conf.AdminNicks,
 		connection: nil,
 		ioReader: nil,
 		tpReader: nil,
@@ -72,16 +74,6 @@ func (bot *Bot) launch() {
 		return
 	}
 
-	bot.handleCredentials()
-
-	err = bot.handleInitialPing()
-	if err != nil {
-		bot.errChan <- err
-		return
-	}
-
-	bot.joinChannels()
-
 	bot.listen()
 }
 
@@ -93,12 +85,26 @@ func (bot *Bot) connect() (err error) {
 	}
 	bot.connection = conn
 	log.Printf("Connected to Server %s (%s)\n", bot.server, bot.connection.RemoteAddr())
-	return nil
-}
 
-func (bot *Bot) handleCredentials() {
+	// Handle Credentials
 	fmt.Fprintf(bot.connection, "NICK %s\r\n", bot.nickname)
 	fmt.Fprintf(bot.connection, "USER %s 0 * :%s\r\n", bot.username, bot.username)
+
+	// Handle first ping
+	err = bot.handleInitialPing()
+	if err != nil {
+		return err
+	}
+
+	// Join Channels
+	for i := 0; i < len(bot.ircChannels); i++ {
+		fmt.Fprintf(bot.connection, "JOIN %s\r\n", bot.ircChannels[i])
+	}
+
+	// Identify with the NickServ
+	fmt.Fprintf(bot.connection, "PRIVMSG NickServ :IDENTIFY %s\r\n", bot.password)
+
+	return nil
 }
 
 func (bot *Bot) handleInitialPing() (err error) {
@@ -109,7 +115,7 @@ func (bot *Bot) handleInitialPing() (err error) {
 	// Wait for PING
 	for line, err = bot.tpReader.ReadLine();
 		line[0:4] != "PING" && err == nil;
-	line, err = bot.tpReader.ReadLine() {
+		line, err = bot.tpReader.ReadLine() {
 		fmt.Printf("%s\n", line)
 	}
 
@@ -122,12 +128,6 @@ func (bot *Bot) handleInitialPing() (err error) {
 	var response = "PONG" + line[4:]
 	fmt.Fprintf(bot.connection, "%s\r\n", response)
 	return nil
-}
-
-func (bot *Bot) joinChannels() {
-	for i := 0; i < len(bot.ircChannels); i++ {
-		fmt.Fprintf(bot.connection, "JOIN %s\r\n", bot.ircChannels[i])
-	}
 }
 
 func (bot *Bot) listen() {
@@ -161,15 +161,19 @@ func (bot *Bot) handleLine(line string) {
 		return;
 	}
 
-	fmt.Printf("%s %s: %s\n",channel, nick, msg)
+	fmt.Printf("%s <- %s: %s\n",channel, nick, msg)
 
-	coreMsg := convertToCoreMessage(nick, msg)
+	coreMsg := bot.convertToCoreMessage(nick, msg)
 
 	response := core.GenerateResponse(coreMsg)
-
 	if "" != response {
-		fmt.Printf("%s %s: %s\n",channel, bot.nickname, response)
-		fmt.Fprintf(bot.connection, "PRIVMSG %s :%s\r\n", channel, response)
+		responseChan := channel
+		if bot.nickname == channel {
+			responseChan = nick
+		}
+
+		fmt.Printf("%s <- %s: %s\n", responseChan, bot.nickname, response)
+		fmt.Fprintf(bot.connection, "PRIVMSG %s :%s\r\n", responseChan, response)
 	}
 }
 
@@ -216,7 +220,7 @@ func parseChannelLine(line string) (nick string, msg string, channel string) {
 		c := line[i]
 
 		if ' ' == c {
-			// Reached second space. Next character should be channelHash
+			// Reached second space. Next character should be start of channel/user
 			i++
 			break
 		}
@@ -230,12 +234,12 @@ func parseChannelLine(line string) (nick string, msg string, channel string) {
 		return "","",""
 	}
 
-	// Still here, so got PRIVMSG. Now get channel the msg was sent on
-	if '#' != line[i] {
-		// Something went wrong. Should be channelHash. Ignore whatever this line is.
-		return "","",""
-	}
+	//if '#' != line[i] {
+	//	// Something went wrong. Should be channelHash. Ignore whatever this line is.
+	//	return "","",""
+	//}
 
+	// Still here, so got PRIVMSG. Now get channel the msg was sent on
 	for ; i < len(line); i++ {
 		c := line[i]
 
@@ -262,22 +266,29 @@ func parseChannelLine(line string) (nick string, msg string, channel string) {
 	return string(nickB), string(mesgB), string(chanB)
 }
 
-func convertToCoreMessage(nick string, msg string) *message.Message {
-	id,_ := uuid.NewV4()
-	sender := &user.User{ // Call Read Function later
-		ID: id,
-		JBID: "",
-		DiscordID: "",
-		DiscordUserName: "",
-		IrcID: nick,
-		TwitchID: "",
-		TelegramID: "",
-		DiscordUser: nil,
-	}
+func (bot *Bot) convertToCoreMessage(nick string, msg string) *message.Message {
+	sender := user.New( // Call Read Function later
+	"",
+	"",
+	"",
+	nick,
+	"",
+	"",
+	bot.isAdmin(nick))
 
 	return &message.Message {
 		Sender: sender,
 		CreatedOn: time.Now(),
 		Content: msg,
 	}
+}
+
+func (bot *Bot) isAdmin(nick string) bool {
+	for i:=0; i<len(bot.adminNicks); i++ {
+		if nick == bot.adminNicks[i] {
+			return true
+		}
+	}
+
+	return false
 }

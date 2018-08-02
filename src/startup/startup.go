@@ -57,177 +57,147 @@ func askUserToStartConfigWizard(userDataDir string) {
 }
 
 func createConfig(userDataDir string) {
-	mainConfStart :=
-		"{\n"
-	discordConf :=
-		"  \"Discord\": {\n" +
-			"    \"BotToken\": \"\"\n" +
-			"  },\n"
-	ircConfStart :=
-		"  \"IRC\": {\n" +
-			"    \"Servers\": [\n"
-	ircServerConfStart :=
-		"      {\n"
-	ircServerConfServer :=
-		"        \"Server\": "
-	ircServerConfPort :=
-		"        \"Port\": "
-	ircServerConfNick :=
-		"        \"Nick\": "
-	ircServerConfUser :=
-		"        \"User\": "
-	ircServerConfChannelsStart :=
-		"        \"Channels\": [\n"
-	ircServerConfChannelsEnd :=
-		"        ]\n"
-	ircServerConfEndComma :=
-		"      },\n"
-	ircServerConfEnd :=
-		"      }\n"
-	ircConfEnd :=
-		"    ]\n" +
-		"  },\n"
-	websitePortConfStart :=
-		"  \"WebSitePort\": \""
-	websitePortConfEnd :=   "\"\n"
-	mainConfEnd :=
-		"}"
+	var config mainConf
+	config.Discord = handleDiscordConf()
+	config.IRC = handleIrcConf()
+	config.WebSitePort = handleWebSitePortConf()
+	writeConfigToFile(config, userDataDir)
 
-	out := mainConfStart +
-		discordConf +
-		ircConfStart +
-		ircServerConfStart +
-		ircServerConfServer
+}
 
-	server := ""
-	port := ""
-	nick := ""
-	user := ""
-	channel := ""
-	fmt.Println("Enter IRC Server Information:")
-
-	fmt.Print("Server (Ex: irc.geekshed.net): ")
-	fmt.Scanf("%s", &server)
-	out = out + "\"" + server + "\",\n" +
-		ircServerConfPort
-	server = ""
-
-	fmt.Print("Port (Ex: 6667): ")
-	fmt.Scanf("%s", &port)
-	out = out + "\"" + port + "\",\n" +
-		ircServerConfNick
-	port = ""
-
-	fmt.Print("Nick (Ex: Stuart): ")
-	fmt.Scanf("%s", &nick)
-	out = out + "\"" + nick + "\",\n" +
-		ircServerConfUser
-	nick = ""
-
-	fmt.Print("User (Ex: stuart): ")
-	fmt.Scanf("%s", &user)
-	out = out + "\"" + user + "\",\n" +
-		ircServerConfChannelsStart
-	user = ""
-
-	fmt.Print("Channel Name (Ex: #jupitercolony): ")
-	fmt.Scanf("%s", &channel)
-	out = out +
-		"          \"" + channel + "\""
-	channel = ""
-
-	userAddChannel := "y"
-	fmt.Printf("Add another channel for this Server? (y/n) [%s]: ", userAddChannel)
-	fmt.Scanf("%s", &userAddChannel)
-
-	for "y" == userAddChannel {
-		out = out + ",\n"
-		fmt.Print("Channel Name (Ex: #jupitercolony): ")
-		fmt.Scanf("%s", &channel)
-		out = out +
-			"          \"" + channel + "\""
-		channel = ""
-
-		fmt.Printf("Add another channel for this Server? (y/n) [%s]: ", userAddChannel)
-		fmt.Scanf("%s", &userAddChannel)
+func handleDiscordConf() discordbot.DiscordConf {
+	return discordbot.DiscordConf{
+		BotToken: "",
 	}
-	out = out + "\n" +
-		ircServerConfChannelsEnd
+}
+
+func handleIrcConf() ircbot.IrcConf {
+	var ret ircbot.IrcConf
+
+	ret.Servers = append(ret.Servers, createIrcServerConf())
 
 	userAddNewServerConf := "y"
 	fmt.Printf("Add new IRC Server? (y/n) [%s]: ", userAddNewServerConf)
 	fmt.Scanf("%s", &userAddNewServerConf)
 
 	for "y" == userAddNewServerConf {
-		out = out +
-			ircServerConfEndComma +
-			ircServerConfStart +
-			ircServerConfServer
+		ret.Servers = append(ret.Servers, createIrcServerConf())
 
-		fmt.Print("Server (Ex: irc.geekshed.net): ")
-		fmt.Scanf("%s", &server)
-		out = out + "\"" + server + "\",\n" +
-			ircServerConfPort
-		server = ""
+		fmt.Printf("Add new IRC Server? (y/n) [%s]: ", userAddNewServerConf)
+		fmt.Scanf("%s", &userAddNewServerConf)
+	}
 
-		fmt.Print("Port (Ex: 6667): ")
-		fmt.Scanf("%s", &port)
-		out = out + "\"" + port + "\",\n" +
-			ircServerConfNick
-		port = ""
+	return ret
+}
 
-		fmt.Print("Nick (Ex: Stuart): ")
-		fmt.Scanf("%s", &nick)
-		out = out + "\"" + nick + "\",\n" +
-			ircServerConfUser
-		nick = ""
+func handleWebSitePortConf() string {
+	port := "8080"
+	fmt.Printf("Select a port number for the website [%s]: ", port)
+	fmt.Scanf("%s", &port)
+	if port == "" || len(port) > 5 {
+		fmt.Printf("\"%s\" is an incorrect port. Defaulting to \"8080\"\n", port)
+		port = "8080"
+	}
 
-		fmt.Print("User (Ex: stuart): ")
-		fmt.Scanf("%s", &user)
-		out = out + "\"" + user + "\",\n" +
-			ircServerConfChannelsStart
-		user = ""
+	return port
+}
 
+func writeConfigToFile(config mainConf, userDataDir string) {
+	js, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		log.Fatalln("An error occured while Marshalling the user configuration. Error: ", err)
+	}
+
+	_ = ioutil.WriteFile(userDataDir + "/main-conf.json", js, 0644)
+}
+
+func createIrcServerConf() ircbot.IrcServerConf {
+	var ircServConf ircbot.IrcServerConf
+
+	fmt.Println("Enter IRC Server Information:")
+	fmt.Print("Server (Ex: irc.geekshed.net): ")
+	fmt.Scanf("%s", &ircServConf.Server)
+
+	fmt.Print("Port (Ex: 6667): ")
+	fmt.Scanf("%s", &ircServConf.Port)
+
+	fmt.Print("Nick (Ex: Stuart): ")
+	fmt.Scanf("%s", &ircServConf.Nick)
+
+	fmt.Print("User (Ex: stuart): ")
+	fmt.Scanf("%s", &ircServConf.User)
+
+	fmt.Print("Password: ")
+	fmt.Scanf("%s", &ircServConf.Password)
+
+	ircServConf.Channels = handleIrcServerChannelsConf()
+
+	ircServConf.AdminNicks = handleIrcServerAdminNicksConf()
+
+	return ircServConf
+}
+
+func handleIrcServerChannelsConf() []string {
+	channels := []string{}
+	channel := ""
+	fmt.Print("Channel Name (Ex: #jupitercolony): ")
+	fmt.Scanf("%s", &channel)
+	channels = append(channels, channel)
+
+	userAddChannel := "y"
+	fmt.Printf("Add another channel for this Server? (y/n) [%s]: ", userAddChannel)
+	fmt.Scanf("%s", &userAddChannel)
+
+	for "y" == userAddChannel {
+		channel = ""
 		fmt.Print("Channel Name (Ex: #jupitercolony): ")
 		fmt.Scanf("%s", &channel)
-		out = out +
-			"          \"" + channel + "\""
-		channel = ""
+		channels = append(channels, channel)
 
-		userAddChannel := "y"
 		fmt.Printf("Add another channel for this Server? (y/n) [%s]: ", userAddChannel)
 		fmt.Scanf("%s", &userAddChannel)
+	}
 
-		for "y" == userAddChannel {
-			out = out + ",\n"
-			fmt.Print("Channel Name (Ex: #jupitercolony): ")
-			fmt.Scanf("%s", &channel)
-			out = out +
-				"          \"" + channel + "\""
-			channel = ""
+	return channels
+}
 
-			fmt.Printf("Add another channel for this Server? (y/n) [%s]: ", userAddChannel)
-			fmt.Scanf("%s", &userAddChannel)
+func handleIrcServerAdminNicksConf() []string {
+	nicks := []string{}
+	nick := ""
+	fmt.Print("Bot Admin Nickname for Server: ")
+	fmt.Scanf("%s", &nick)
+	if nick != "" {
+		nicks = append(nicks, nick)
+	} else {
+		fmt.Println("Having no Bot Admins will disable the functionality of some plugins. " +
+			"It is strongly advised that you have at least one registered nickname entered as " +
+			"a Bot Administrator.")
+	}
+
+	userAddAdmin := "y"
+	fmt.Printf("Add a Bot Admin Nickname for this server? (y/n) [%s]: ", userAddAdmin)
+	fmt.Scanf("%s", &userAddAdmin)
+
+	for "y" == userAddAdmin {
+		nick = ""
+		fmt.Print("Bot Admin Nickname for Server: ")
+		fmt.Scanf("%s", &nick)
+
+		if nick != "" {
+			if !util.IsStringInArray(nick, nicks) {
+				nicks = append(nicks, nick)
+			} else {
+				fmt.Println(nick + " is already registered.")
+			}
+		} else if len(nicks) <= 0 {
+			fmt.Println("Having no Bot Admins will disable the functionality of some plugins. " +
+				"It is strongly advised that you have at least one registered nickname entered as " +
+				"a Bot Administrator.")
 		}
-		out = out + "\n" +
-			ircServerConfChannelsEnd
+
+		fmt.Printf("Add a Bot Admin Nickname for this server? (y/n) [%s]: ", userAddAdmin)
+		fmt.Scanf("%s", &userAddAdmin)
 	}
 
-	sitePort := "8080"
-	fmt.Printf("Select a port number for the website [%s]: ", sitePort)
-	fmt.Scanf("%s", &sitePort)
-
-	if sitePort == "" || len(sitePort) > 5 {
-		fmt.Printf("\"%s\" is an incorrect port. Defaulting to \"8080\"\n", sitePort)
-		sitePort = "8080"
-	}
-
-
-	out = out +
-		ircServerConfEnd +
-		ircConfEnd +
-		websitePortConfStart + sitePort + websitePortConfEnd +
-		mainConfEnd
-
-	_ = ioutil.WriteFile(userDataDir + "/main-conf.json", []byte(out), 0644)
+	return nicks
 }

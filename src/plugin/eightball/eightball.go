@@ -1,10 +1,8 @@
 package eightball
 
-import (
-	"math/rand"
-)
+type RandInt func(int) int
 
-func Plugin(msgContent string) string {
+func Plugin(msgContent string, randFn RandInt) string {
 	if len(msgContent) <= 0 {
 		return "You must first ask a question, before you can receive the answer."
 	}
@@ -31,7 +29,7 @@ func Plugin(msgContent string) string {
 		"Very doubtful",
 	}
 
-	selectedIndex := rand.Intn(len(answers))
+	selectedIndex := randFn(len(answers))
 
 	return answers[selectedIndex]
 }

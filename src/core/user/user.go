@@ -13,13 +13,14 @@ type User struct{
 	IrcID string
 	TwitchID string
 	TelegramID string
+	IsBotAdmin bool
 
 	// Temp until the relationships are more clear
 	DiscordUser *discordgo.User
 }
 
 func New(jbID string, discordID string, discordUserName string, ircID string,
-		 twitchID string, telegramID string) *User {
+		 twitchID string, telegramID string, isBotAdmin bool) *User {
 		 	id, _ := uuid.NewV4()
 		 	return &User{
 		 		ID: id,
@@ -29,5 +30,6 @@ func New(jbID string, discordID string, discordUserName string, ircID string,
 		 		IrcID: ircID,
 		 		TwitchID: twitchID,
 		 		TelegramID: telegramID,
+		 		IsBotAdmin: isBotAdmin,
 			}
 }
