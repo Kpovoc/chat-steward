@@ -21,8 +21,7 @@ Support our progress on [Patreon](https://www.patreon.com/KhronoSync)
 To enable IRC private message support, Chat Steward requires a registered nick 
 and password with the configured IRC servers.  
 [Freenode: Nickname Registration](https://freenode.net/kb/answer/registration)  
-[Geekshed: Why should I register my nickname, and how do I do it?]
-(http://www.geekshed.net/2009/11/why-should-i-register-my-nickname-and-how-do-i-do-it/)  
+[Geekshed: Why should I register my nickname, and how do I do it?](http://www.geekshed.net/2009/11/why-should-i-register-my-nickname-and-how-do-i-do-it/)  
 
 In order to use the Discord functionality, Chat Steward requires a Discord bot
 token.  
