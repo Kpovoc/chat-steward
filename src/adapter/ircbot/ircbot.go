@@ -150,10 +150,6 @@ func (bot *Bot) listen() {
 }
 
 func (bot *Bot) handleLine(line string) {
-	// & = Operator, Admin
-	// @ = Operator
-	// ~ = Owner, Operator
-	// + = Has Voice
 	nick, msg, channel := parseChannelLine(line)
 	if "" == nick || 		// Line is not a message
 		bot.nickname == nick {	// Line is a message from our bot

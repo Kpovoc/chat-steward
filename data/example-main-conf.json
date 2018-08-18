@@ -3,7 +3,17 @@
 // Remove all comments in main-conf.json
 {
   "Discord": {
-    "BotToken": "<Your-Bot-Token-Here>"
+    "BotToken": "<Your-Bot-Token-Here>",
+    "Admins": [
+      { // Admin 1
+        "Username": "<Admin-Username-Here>",            // Example: AdminA
+        "Discriminator": "<Admin-Discriminator-Here>"   // Example: 1234
+      },
+      { // Admin 2
+        "Username": "<Admin-Username-Here>",            // Example: AdminB
+        "Discriminator": "<Admin-Discriminator-Here>"   // Example: 2345
+      }
+    ]
   },
   "IRC": {
     "Servers": [
@@ -12,9 +22,14 @@
         "Port": "<Port-Number-Here>",         // Example: 1234
         "Nick": "<Your-Bot-Nickname-Here>",   // Example: Jimmy
         "User": "<Your-Bot-Username-Here>",   // Example: Jimmy8725
+        "Password": "<Your-Bot-Password>",    // Example: Password12345!
         "Channels": [
           "<Channel-To-Join-Here>",  // Example: #thechannelname1
           "<Channel-To-Join-Here>"   // Example: #thechannelname2
+        ],
+        "AdminNicks": [
+          "<Admin-Nickname-Here>",  // Example: AdminA
+          "<Admin-Nickname-Here>"   // Example: AdminB
         ]
       },
       { // Server 2
@@ -22,9 +37,14 @@
         "Port": "<Port-Number-Here>",         // Example: 1234
         "Nick": "<Your-Bot-Nickname-Here>",   // Example: Jimmy
         "User": "<Your-Bot-Username-Here>",   // Example: Jimmy8725
+        "Password": "<Your-Bot-Password>",    // Example: Password12345!
         "Channels": [
           "<Channel-To-Join-Here>",  // Example: #thechannelname1
           "<Channel-To-Join-Here>"   // Example: #thechannelname2
+        ],
+        "AdminNicks": [
+          "<Admin-Nickname-Here>",  // Example: AdminA
+          "<Admin-Nickname-Here>"   // Example: AdminB
         ]
       }
     ]
