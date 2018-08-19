@@ -1,5 +1,5 @@
 name: chat-steward
-version: git
+version: 0.1.0
 summary: Chatbot written in Go for Jupiter Broadcasting
 description: |
   https://gitlab.com/Kpovoc/chat-steward
