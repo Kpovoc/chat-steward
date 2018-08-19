@@ -31,11 +31,11 @@ token.
 **ToDo:** Add guide for using nginx to redirect from lower ports and handle SSL for the Chat Steward voting site
 
 ## Install
-Chat Steward is currently only available in the edge channel on the 
+Chat Steward's latest point release can be found in the beta channel on the 
 [SnapStore](https://snapcraft.io/store). To install run the following command 
 on your terminal  
 ```
-sudo snap install chat-steward --edge --devmode
+sudo snap install chat-steward --beta --devmode
 ```
 After that, you can launch the bot with `chat-steward`. Follow along with the 
 install wizard, and you're good to go.  
