@@ -1,0 +1,24 @@
+## 0.1.0
+- Application licensed through Apache 2.0.
+- Bot can connect to multiple IRC servers and multiple channels within
+  those servers.
+- Bot can recognize registed bot admins within channels.
+- Bot can respond to users in IRC channels.
+- Bot can respond to users in Private Messages.
+- Bot can identify itself to IRC servers/channels to prevent
+  impersonation.
+- Bot can read from config file.
+  - If a config file does not exist or is missing data, bot will help
+    user resolve the issue with "Setup Wizard."
+- Application hosts website used by "Plugins."
+- Application can write to SQLite database file to prevent data-loss
+  through application crash or restart.
+- Application is published to the Snap Store.
+- Application builds its Snap from master branch.
+- Application has basic Discord support.
+- Bot recognizes the following commands:
+  - `!8ball` or `!eightball`: Will respond with a random canned response
+    like an 8-ball.
+  - `!suggest`: Creates a title suggestion from user for current show.
+  - `!start_show`: (Admin only) Clears title suggestions and labels the
+    title suggestion page of the website.
