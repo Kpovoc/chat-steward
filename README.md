@@ -35,7 +35,7 @@ Chat Steward's latest point release can be found in the beta channel on the
 [SnapStore](https://snapcraft.io/store). To install run the following command 
 on your terminal  
 ```
-sudo snap install chat-steward --beta --devmode
+sudo snap install chat-steward --beta
 ```
 After that, you can launch the bot with `chat-steward`. Follow along with the 
 install wizard, and you're good to go.  
