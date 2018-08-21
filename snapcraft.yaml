@@ -1,5 +1,5 @@
 name: chat-steward
-version: 0.1.0
+version: 0.1.1
 summary: Chatbot written in Go for Jupiter Broadcasting
 description: |
   https://gitlab.com/Kpovoc/chat-steward
@@ -10,7 +10,9 @@ confinement: strict
 apps:
   chat-steward:
     command: bin/chat-steward --userdata "$SNAP_USER_COMMON" --resources "$SNAP/resources"
-    plugs: [network]
+    plugs:
+      - network
+      - network-bind
 
 parts:
   go:
