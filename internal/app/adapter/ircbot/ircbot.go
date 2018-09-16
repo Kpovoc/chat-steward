@@ -8,9 +8,9 @@ import (
 	"net/textproto"
 	"time"
 
-	"gitlab.com/Kpovoc/chat-steward/src/core"
-	"gitlab.com/Kpovoc/chat-steward/src/core/message"
-	"gitlab.com/Kpovoc/chat-steward/src/core/user"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/core"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/core/user"
 
 	)
 

@@ -1,13 +1,13 @@
 package startup
 
 import (
-  "gitlab.com/Kpovoc/chat-steward/src/adapter/ircbot"
-  "gitlab.com/Kpovoc/chat-steward/src/adapter/discordbot"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/adapter/ircbot"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/adapter/discordbot"
   "io/ioutil"
   "fmt"
   "log"
   "encoding/json"
-  "gitlab.com/Kpovoc/chat-steward/src/util"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/util"
 )
 
 type mainConf struct {

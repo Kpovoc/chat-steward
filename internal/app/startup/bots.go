@@ -1,10 +1,10 @@
 package startup
 
 import (
-  "gitlab.com/Kpovoc/chat-steward/src/adapter/ircbot"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/adapter/ircbot"
   "log"
-  "gitlab.com/Kpovoc/chat-steward/src/web"
-  "gitlab.com/Kpovoc/chat-steward/src/adapter/discordbot"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/web"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/adapter/discordbot"
 )
 
 func LaunchBots(resourceDir string) {

@@ -1,8 +1,8 @@
 package titles
 
 import (
-	"gitlab.com/Kpovoc/chat-steward/src/sqlite"
-	"gitlab.com/Kpovoc/chat-steward/src/core/message"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/sqlite"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
 	"log"
 )
 

@@ -16,11 +16,12 @@ apps:
 
 parts:
   go:
-    source-tag: go1.10.2
+    source-tag: go1.11
   chat-steward:
     after: [go]
     source: .
     plugin: go
     go-importpath: gitlab.com/Kpovoc/chat-steward
     install: |
-      cp -a resources $SNAPCRAFT_PART_INSTALL/resources
+      mkdir -p $SNAPCRAFT_PART_INSTALL/resources
+      cp -a web $SNAPCRAFT_PART_INSTALL/resources/

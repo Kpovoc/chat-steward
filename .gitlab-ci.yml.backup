@@ -1,0 +1,39 @@
+variables:
+  APP_PATH: /go/src/gitlab.com/Kpovoc/chat-steward
+  CS_CMD: gitlab.com/Kpovoc/chat-steward/cmd/chat-steward
+
+stages:
+  - setup
+  - build
+  - test
+
+setup:
+  image: golang:1.11
+  stage: setup
+  environment:
+    name: main
+  before_script:
+    - mkdir -p /go/src/gitlab.com/Kpovoc/
+    - ln -s $PWD ${APP_PATH}
+    - mkdir -p ${APP_PATH}/vendor
+    - cd ${APP_PATH}
+    - export GOPATH=/go
+  script:
+    - go get github.com/bwmarrin/discordgo
+    - go get github.com/gofrs/uuid
+    - go get github.com/mattn/go-sqlite3
+
+build:
+  stage: build
+  environment:
+    name: main
+  script:
+    - go install -v ${CS_CMD}
+
+test:
+  image: golang:1.11
+  stage: test
+  environment:
+    name: main
+  script:
+    - go test -v $APPNAME

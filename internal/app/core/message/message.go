@@ -3,7 +3,7 @@ package message
 import (
 	"time"
 
-	"gitlab.com/Kpovoc/chat-steward/src/core/user"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/core/user"
 )
 
 type Message struct{

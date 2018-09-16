@@ -1,7 +1,7 @@
 package startup
 
 import (
-	"gitlab.com/Kpovoc/chat-steward/src/sqlite"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/sqlite"
 	"log"
 )
 

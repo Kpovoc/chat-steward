@@ -17,10 +17,10 @@
 .idea/
 
 # Config file containing sensitive info
-data/main-conf.json
+configs/main-conf.json
 
 # Test Database
-data/main.db
+configs/main.db
 
 # Snap Files
 parts/

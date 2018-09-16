@@ -2,7 +2,7 @@ package eightball
 
 import (
 	"testing"
-	"gitlab.com/Kpovoc/chat-steward/src/plugin/eightball"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin/eightball"
 )
 
 func TestPlugin_BlankMsg(t *testing.T) {

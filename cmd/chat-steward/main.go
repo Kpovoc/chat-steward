@@ -4,18 +4,18 @@ import (
 	"flag"
 	"time"
 	"math/rand"
-	"gitlab.com/Kpovoc/chat-steward/src/startup"
-	"gitlab.com/Kpovoc/chat-steward/src/plugin"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/startup"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin"
 )
 
 func main() {
 	rd := flag.String(
 		"resources",
-		"resources",
+		".",
 		"directory containing resources needed for application")
 	udd := flag.String(
 		"userdata",
-		"data",
+		"configs",
 		"directory containing config file and database")
 	flag.Parse()
 	resourceDir := *rd

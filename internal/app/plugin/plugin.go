@@ -1,9 +1,9 @@
 package plugin
 
 import (
-	"gitlab.com/Kpovoc/chat-steward/src/core/message"
-	"gitlab.com/Kpovoc/chat-steward/src/plugin/titles"
-	"gitlab.com/Kpovoc/chat-steward/src/plugin/eightball"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin/titles"
+	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin/eightball"
 	"math/rand"
 )
 

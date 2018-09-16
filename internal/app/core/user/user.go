@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 )
 
 type User struct{
