@@ -2,6 +2,7 @@ package discordbot
 
 import (
   "fmt"
+  "log"
   "os"
   "os/signal"
   "syscall"
@@ -106,9 +107,31 @@ func (bot *DiscordBot) messageCreate(s *discordgo.Session, m *discordgo.MessageC
 
   response := core.GenerateResponse(coreMsg)
 
-  if response != "" {
-    s.ChannelMessageSend(m.ChannelID, response)
+  if nil == response || response.Content == "" {
+    // Received no response. Ignore and move on
+    return
   }
+  channelId := m.ChannelID
+
+  if response.ForceWhisper {
+    channel, err := s.UserChannelCreate(m.Author.ID)
+
+    // Could not find or create a User PM Channel. Log error, and fail by not responding, in case
+    // response contained sensitive information.
+    if err != nil {
+      log.Printf(
+        "Response required private message, and a channel could not be created for user " +
+            "%s#%s\nError: %s",
+        m.Author.Username,
+        m.Author.Discriminator,
+        err.Error())
+      return
+    }
+
+    channelId = channel.ID
+  }
+
+  s.ChannelMessageSend(channelId, response.Content)
 }
 
 func (bot *DiscordBot) convertToCoreMessage(s *discordgo.Session, dMsg *discordgo.MessageCreate) *message.Message {

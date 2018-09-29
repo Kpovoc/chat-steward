@@ -2,26 +2,26 @@ package plugin
 
 import (
 	"gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
-	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin/titles"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/core/response"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/plugin/titles"
 	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin/eightball"
 	"math/rand"
 )
 
-func GetPluginResponse(pluginName string, msgContent string, m *message.Message) string {
-	response := ""
+func GetPluginResponse(pluginName string, msgContent string, m *message.Message) *response.Response {
 
 	switch pluginName {
 	case "8ball":
 		fallthrough
 	case "eightball":
-		response = eightball.Plugin(msgContent, randNum)
+		return eightball.Plugin(msgContent, randNum)
 	case "suggest":
-		response = titles.Plugin(m, msgContent)
+		return titles.Plugin(m, msgContent)
 	case "start_show":
-		response = titles.StartShow(m, msgContent)
+		return titles.StartShow(m, msgContent)
+  default:
+    return nil
 	}
-
-	return response
 }
 
 func InitPlugins(resourceDir string) {
