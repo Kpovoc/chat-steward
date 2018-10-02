@@ -49,5 +49,17 @@
       }
     ]
   },
-  "WebSitePort": "8080"
+  "WebSitePort": "8080",
+  "Plugins": {
+    "Info": [
+      {
+        "Term": "<info-term-here>", // Example: discord
+        "Info": "<info-to-display>" // Example: https://discord.me/jupitercolony
+      },
+      {
+        "Term": "<info-term-here>", // Example: irc
+        "Info": "<info-to-display>" // Example: Server: irc.geekshed.net | Channel: #jupiterbroadcasting
+      }
+    ]
+  }
 }

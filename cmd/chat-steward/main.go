@@ -2,10 +2,9 @@ package main
 
 import (
 	"flag"
-	"time"
-	"math/rand"
 	"gitlab.com/Kpovoc/chat-steward/internal/app/startup"
-	"gitlab.com/Kpovoc/chat-steward/internal/app/plugin"
+	"math/rand"
+	"time"
 )
 
 func main() {
@@ -31,7 +30,7 @@ func main() {
 	startup.InitializeDatabase(userDataDir)
 
 	// Initialize application plugins
-	plugin.InitPlugins(resourceDir)
+	startup.InitializePlugins(resourceDir)
 
 	// Launch all bots
 	startup.LaunchBots(resourceDir)
