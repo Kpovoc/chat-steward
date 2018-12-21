@@ -4,6 +4,7 @@ import (
   "gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
   "gitlab.com/Kpovoc/chat-steward/internal/app/core/response"
   "gitlab.com/Kpovoc/chat-steward/internal/app/plugin/info"
+  "gitlab.com/Kpovoc/chat-steward/internal/app/plugin/show"
   "gitlab.com/Kpovoc/chat-steward/internal/app/plugin/titles"
   "gitlab.com/Kpovoc/chat-steward/internal/app/plugin/eightball"
   "math/rand"
@@ -22,8 +23,8 @@ func GetPluginResponse(pluginName string, msgContent string, m *message.Message)
     return eightball.Plugin(msgContent, randNum)
   case "suggest":
     return titles.Plugin(m, msgContent)
-  case "start_show":
-    return titles.StartShow(m, msgContent)
+  case "show":
+    return show.Plugin(m.Sender, msgContent)
   case "info":
     return info.Plugin(msgContent)
   default:

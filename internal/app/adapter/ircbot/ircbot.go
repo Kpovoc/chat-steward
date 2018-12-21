@@ -2,6 +2,7 @@ package ircbot
 
 import (
   "bufio"
+  "crypto/tls"
   "fmt"
   "log"
   "net"
@@ -21,6 +22,7 @@ type IrcConf struct {
 type IrcServerConf struct {
   Server string
   Port string
+  UseTLS bool
   Nick string
   User string
   Password string
@@ -31,6 +33,7 @@ type IrcServerConf struct {
 type Bot struct{
   server string
   port string
+  useTls bool
   nickname string
   username string
   password string
@@ -53,6 +56,7 @@ func launchBotForServer(conf IrcServerConf, fatalErr chan error) {
   bot := Bot {
     server: conf.Server,
     port: conf.Port,
+    useTls: conf.UseTLS,
     nickname: conf.Nick,
     username: conf.User,
     password: conf.Password,
@@ -78,7 +82,14 @@ func (bot *Bot) launch() {
 }
 
 func (bot *Bot) connect() (err error) {
-  conn, err := net.Dial("tcp", bot.server + ":" + bot.port)
+  var conn net.Conn
+
+  if (bot.useTls) {
+    conn, err = tls.Dial("tcp", bot.server + ":" + bot.port, nil)
+  } else {
+    conn, err = net.Dial("tcp", bot.server + ":" + bot.port)
+  }
+
   if err != nil {
     log.Fatal("Unable to connect ", err)
     return err
@@ -90,12 +101,6 @@ func (bot *Bot) connect() (err error) {
   fmt.Fprintf(bot.connection, "NICK %s\r\n", bot.nickname)
   fmt.Fprintf(bot.connection, "USER %s 0 * :%s\r\n", bot.username, bot.username)
 
-  // Handle first ping
-  err = bot.handleInitialPing()
-  if err != nil {
-    return err
-  }
-
   // Join Channels
   for i := 0; i < len(bot.ircChannels); i++ {
     fmt.Fprintf(bot.connection, "JOIN %s\r\n", bot.ircChannels[i])
@@ -103,6 +108,20 @@ func (bot *Bot) connect() (err error) {
 
   // Identify with the NickServ
   fmt.Fprintf(bot.connection, "PRIVMSG NickServ :IDENTIFY %s\r\n", bot.password)
+
+  // Setup Reader
+  bot.ioReader = bufio.NewReader(bot.connection)
+  bot.tpReader = textproto.NewReader(bot.ioReader)
+
+
+  // Handle first ping
+  //err = bot.handleInitialPing()
+  //if err != nil {
+  //  return err
+  //}
+
+
+
 
   return nil
 }
@@ -113,11 +132,24 @@ func (bot *Bot) handleInitialPing() (err error) {
   var line string
 
   // Wait for PING
-  for line, err = bot.tpReader.ReadLine();
-      line[0:4] != "PING" && err == nil;
-  line, err = bot.tpReader.ReadLine() {
-    fmt.Printf("%s\n", line)
+  for {
+    line, err = bot.tpReader.ReadLine();
+    if err != nil {
+      break;
+    }
+
+    if len(line) > 4 && line[0:4] == "PING" {
+      break;
+    }
+
+    fmt.Printf("Received: %s\n", line)
   }
+
+  //for line, err = bot.tpReader.ReadLine();
+  //    line[0:4] != "PING" && err == nil;
+  //    line, err = bot.tpReader.ReadLine() {
+  //  fmt.Printf("%s\n", line)
+  //}
 
   if err != nil {
     bot.connection.Close()
@@ -139,7 +171,7 @@ func (bot *Bot) listen() {
       break;
     }
 
-    if line[0:4] == "PING" {
+    if len(line) > 4 && line[0:4] == "PING" {
       var response = "PONG" + line[4:]
       fmt.Fprintf(bot.connection, "%s\r\n", response)
       continue;
