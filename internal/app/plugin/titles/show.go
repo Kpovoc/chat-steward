@@ -1,33 +1,16 @@
 package titles
 
 import (
-  "gitlab.com/Kpovoc/chat-steward/internal/app/core/response"
   "gitlab.com/Kpovoc/chat-steward/internal/app/sqlite"
-  "gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
   "log"
 )
 
 var showName string
 
-func StartShow(m *message.Message, msgContent string) *response.Response {
-  author := m.Sender.DiscordUserName
-  if "" == author {
-    author = m.Sender.IrcID
-  }
-
-  if !m.Sender.IsBotAdmin {
-    return &response.Response {
-      Content: author + " is not a registered Bot Admin. Could not comply with request.",
-      ForceWhisper: false,
-    }
-  }
-
-  updateShowName(msgContent)
+func StartShow(title string) error {
+  updateShowName(title)
   resetTitles()
-  return &response.Response {
-    Content: "Started \"" + msgContent + "\"",
-    ForceWhisper: false,
-  }
+  return nil
 }
 
 func getShowName() string {
