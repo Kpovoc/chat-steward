@@ -7,10 +7,10 @@ import (
   "os/signal"
   "syscall"
 
+  "github.com/bwmarrin/discordgo"
   "gitlab.com/Kpovoc/chat-steward/internal/app/core"
   "gitlab.com/Kpovoc/chat-steward/internal/app/core/message"
   "gitlab.com/Kpovoc/chat-steward/internal/app/core/user"
-  "github.com/bwmarrin/discordgo"
 )
 
 type DiscordConf struct {
@@ -173,7 +173,7 @@ func testPrintDGOMessage(s *discordgo.Session, dMsg *discordgo.MessageCreate) {
   fmt.Println()
 
   // bool
-  tts := dMsg.Tts // bool
+  tts := dMsg.TTS // bool
   mentionEveryone := dMsg.MentionEveryone // bool
   fmt.Println("Booleans:")
   fmt.Println("Tts             : ", tts)

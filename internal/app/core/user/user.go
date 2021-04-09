@@ -2,7 +2,7 @@ package user
 
 import (
   "github.com/bwmarrin/discordgo"
-  "github.com/gofrs/uuid"
+  "github.com/google/uuid"
 )
 
 type User struct{
@@ -31,7 +31,7 @@ func (u *User) GetDisplayName() string {
 
 func New(jbID string, discordID string, discordUserName string, ircID string,
   twitchID string, telegramID string, isBotAdmin bool) *User {
-  id, _ := uuid.NewV4()
+  id := uuid.New()
   return &User{
     ID: id,
     JBID: jbID,
