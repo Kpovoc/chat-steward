@@ -6,22 +6,20 @@ description: |
 
 grade: devel
 confinement: strict
+base: core20
 
 apps:
   chat-steward:
-    command: bin/chat-steward --userdata "$SNAP_USER_COMMON" --resources "$SNAP/resources"
+    command: bin/chat-steward --userdata $SNAP_USER_COMMON --resources $SNAP/resources
     plugs:
       - network
       - network-bind
 
 parts:
-  go:
-    source-tag: go1.16
   chat-steward:
-    after: [go]
     source: .
     plugin: go
-    go-importpath: gitlab.com/Kpovoc/chat-steward
-    install: |
+    override-build: |
+      snapcraftctl build
       mkdir -p $SNAPCRAFT_PART_INSTALL/resources
       cp -a web $SNAPCRAFT_PART_INSTALL/resources/
